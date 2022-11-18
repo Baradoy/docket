@@ -1,12 +1,12 @@
 defmodule Docket.Tasks do
   @moduledoc """
-  The Tasks context.
+  The Schema.Tasks context.
   """
 
   import Ecto.Query, warn: false
   alias Docket.Repo
 
-  alias Docket.Tasks.Task
+  alias Docket.Schema
 
   @doc """
   Returns the list of tasks.
@@ -14,28 +14,28 @@ defmodule Docket.Tasks do
   ## Examples
 
       iex> list_tasks()
-      [%Task{}, ...]
+      [%Schema.Task{}, ...]
 
   """
   def list_tasks do
-    Repo.all(Task)
+    Repo.all(Schema.Task)
   end
 
   @doc """
   Gets a single task.
 
-  Raises `Ecto.NoResultsError` if the Task does not exist.
+  Raises `Ecto.NoResultsError` if the Schema.Task does not exist.
 
   ## Examples
 
       iex> get_task!(123)
-      %Task{}
+      %Schema.Task{}
 
       iex> get_task!(456)
       ** (Ecto.NoResultsError)
 
   """
-  def get_task!(id), do: Repo.get!(Task, id)
+  def get_task!(id), do: Repo.get!(Schema.Task, id)
 
   @doc """
   Creates a task.
@@ -43,15 +43,15 @@ defmodule Docket.Tasks do
   ## Examples
 
       iex> create_task(%{field: value})
-      {:ok, %Task{}}
+      {:ok, %Schema.Task{}}
 
       iex> create_task(%{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
   def create_task(attrs \\ %{}) do
-    %Task{}
-    |> Task.changeset(attrs)
+    %Schema.Task{}
+    |> Schema.Task.changeset(attrs)
     |> Repo.insert()
   end
 
@@ -61,15 +61,15 @@ defmodule Docket.Tasks do
   ## Examples
 
       iex> update_task(task, %{field: new_value})
-      {:ok, %Task{}}
+      {:ok, %Schema.Task{}}
 
       iex> update_task(task, %{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_task(%Task{} = task, attrs) do
+  def update_task(%Schema.Task{} = task, attrs) do
     task
-    |> Task.changeset(attrs)
+    |> Schema.Task.changeset(attrs)
     |> Repo.update()
   end
 
@@ -79,13 +79,13 @@ defmodule Docket.Tasks do
   ## Examples
 
       iex> delete_task(task)
-      {:ok, %Task{}}
+      {:ok, %Schema.Task{}}
 
       iex> delete_task(task)
       {:error, %Ecto.Changeset{}}
 
   """
-  def delete_task(%Task{} = task) do
+  def delete_task(%Schema.Task{} = task) do
     Repo.delete(task)
   end
 
@@ -95,10 +95,10 @@ defmodule Docket.Tasks do
   ## Examples
 
       iex> change_task(task)
-      %Ecto.Changeset{data: %Task{}}
+      %Ecto.Changeset{data: %Schema.Task{}}
 
   """
-  def change_task(%Task{} = task, attrs \\ %{}) do
-    Task.changeset(task, attrs)
+  def change_task(%Schema.Task{} = task, attrs \\ %{}) do
+    Schema.Task.changeset(task, attrs)
   end
 end

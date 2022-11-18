@@ -2,10 +2,9 @@ defmodule Docket.TasksTest do
   use Docket.DataCase
 
   alias Docket.Tasks
+  alias Docket.Schema
 
   describe "tasks" do
-    alias Docket.Tasks.Task
-
     import Docket.TasksFixtures
 
     @invalid_attrs %{display_colour: nil, display_icon: nil, frequency: nil, frequency_type: nil, subtitle: nil, title: nil, type: nil}
@@ -23,7 +22,7 @@ defmodule Docket.TasksTest do
     test "create_task/1 with valid data creates a task" do
       valid_attrs = %{display_colour: "some display_colour", display_icon: :bolt, frequency: 42, frequency_type: :hours, subtitle: "some subtitle", title: "some title", type: "some type"}
 
-      assert {:ok, %Task{} = task} = Tasks.create_task(valid_attrs)
+      assert {:ok, %Schema.Task{} = task} = Tasks.create_task(valid_attrs)
       assert task.display_colour == "some display_colour"
       assert task.display_icon == :bolt
       assert task.frequency == 42
@@ -41,7 +40,7 @@ defmodule Docket.TasksTest do
       task = task_fixture()
       update_attrs = %{display_colour: "some updated display_colour", display_icon: :"cog-6-tooth", frequency: 43, frequency_type: :days, subtitle: "some updated subtitle", title: "some updated title", type: "some updated type"}
 
-      assert {:ok, %Task{} = task} = Tasks.update_task(task, update_attrs)
+      assert {:ok, %Schema.Task{} = task} = Tasks.update_task(task, update_attrs)
       assert task.display_colour == "some updated display_colour"
       assert task.display_icon == :"cog-6-tooth"
       assert task.frequency == 43
@@ -59,7 +58,7 @@ defmodule Docket.TasksTest do
 
     test "delete_task/1 deletes the task" do
       task = task_fixture()
-      assert {:ok, %Task{}} = Tasks.delete_task(task)
+      assert {:ok, %Schema.Task{}} = Tasks.delete_task(task)
       assert_raise Ecto.NoResultsError, fn -> Tasks.get_task!(task.id) end
     end
 

@@ -29,7 +29,7 @@ defmodule DocketWeb.TaskLive.FormComponent do
           type="select"
           label="display_icon"
           prompt="Choose a value"
-          options={Ecto.Enum.values(Docket.Tasks.Task, :display_icon)}
+          options={Ecto.Enum.values(Docket.Schema.Task, :display_icon)}
         />
         <.input field={{f, :frequency}} type="number" label="frequency" />
         <.input
@@ -37,7 +37,7 @@ defmodule DocketWeb.TaskLive.FormComponent do
           type="select"
           label="frequency_type"
           prompt="Choose a value"
-          options={Ecto.Enum.values(Docket.Tasks.Task, :frequency_type)}
+          options={Ecto.Enum.values(Docket.Schema.Task, :frequency_type)}
         />
         <:actions>
           <.button phx-disable-with="Saving...">Save Task</.button>

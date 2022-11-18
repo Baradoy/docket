@@ -1,4 +1,4 @@
-defmodule Docket.Tasks.Task do
+defmodule Docket.Schema.Task do
   use Ecto.Schema
   import Ecto.Changeset
 

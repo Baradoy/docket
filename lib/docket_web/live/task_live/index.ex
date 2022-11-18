@@ -2,7 +2,7 @@ defmodule DocketWeb.TaskLive.Index do
   use DocketWeb, :live_view
 
   alias Docket.Tasks
-  alias Docket.Tasks.Task
+  alias Docket.Schema
 
   @impl true
   def mount(_params, _session, socket) do
@@ -23,7 +23,7 @@ defmodule DocketWeb.TaskLive.Index do
   defp apply_action(socket, :new, _params) do
     socket
     |> assign(:page_title, "New Task")
-    |> assign(:task, %Task{})
+    |> assign(:task, %Schema.Task{})
   end
 
   defp apply_action(socket, :index, _params) do
