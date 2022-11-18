@@ -1,0 +1,32 @@
+<.header>
+  Task <%= @task.id %>
+  <:subtitle>This is a task record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/tasks/#{@task}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit task</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Title"><%= @task.title %></:item>
+  <:item title="Subtitle"><%= @task.subtitle %></:item>
+  <:item title="Type"><%= @task.type %></:item>
+  <:item title="Display colour"><%= @task.display_colour %></:item>
+  <:item title="Display icon"><%= @task.display_icon %></:item>
+  <:item title="Frequency"><%= @task.frequency %></:item>
+  <:item title="Frequency type"><%= @task.frequency_type %></:item>
+</.list>
+
+<.back navigate={~p"/tasks"}>Back to tasks</.back>
+
+<.modal :if={@live_action == :edit} id="task-modal" show on_cancel={JS.patch(~p"/tasks/#{@task}")}>
+  <.live_component
+    module={DocketWeb.TaskLive.FormComponent}
+    id={@task.id}
+    title={@page_title}
+    action={@live_action}
+    task={@task}
+    navigate={~p"/tasks/#{@task}"}
+  />
+</.modal>
