@@ -19,7 +19,23 @@ defmodule Docket.Schema.Task do
   @doc false
   def changeset(task, attrs) do
     task
-    |> cast(attrs, [:title, :subtitle, :type, :display_colour, :display_icon, :frequency, :frequency_type])
-    |> validate_required([:title, :subtitle, :type, :display_colour, :display_icon, :frequency, :frequency_type])
+    |> cast(attrs, [
+      :title,
+      :subtitle,
+      :type,
+      :display_colour,
+      :display_icon,
+      :frequency,
+      :frequency_type
+    ])
+    |> validate_required([
+      :title,
+      :subtitle,
+      :type,
+      :display_colour,
+      :display_icon,
+      :frequency,
+      :frequency_type
+    ])
   end
 end

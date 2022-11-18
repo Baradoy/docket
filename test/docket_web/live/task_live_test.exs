@@ -4,9 +4,33 @@ defmodule DocketWeb.TaskLiveTest do
   import Phoenix.LiveViewTest
   import Docket.TasksFixtures
 
-  @create_attrs %{display_colour: "some display_colour", display_icon: :bolt, frequency: 42, frequency_type: :hours, subtitle: "some subtitle", title: "some title", type: "some type"}
-  @update_attrs %{display_colour: "some updated display_colour", display_icon: :"cog-6-tooth", frequency: 43, frequency_type: :days, subtitle: "some updated subtitle", title: "some updated title", type: "some updated type"}
-  @invalid_attrs %{display_colour: nil, display_icon: nil, frequency: nil, frequency_type: nil, subtitle: nil, title: nil, type: nil}
+  @create_attrs %{
+    display_colour: "some display_colour",
+    display_icon: :bolt,
+    frequency: 42,
+    frequency_type: :hours,
+    subtitle: "some subtitle",
+    title: "some title",
+    type: "some type"
+  }
+  @update_attrs %{
+    display_colour: "some updated display_colour",
+    display_icon: :"cog-6-tooth",
+    frequency: 43,
+    frequency_type: :days,
+    subtitle: "some updated subtitle",
+    title: "some updated title",
+    type: "some updated type"
+  }
+  @invalid_attrs %{
+    display_colour: nil,
+    display_icon: nil,
+    frequency: nil,
+    frequency_type: nil,
+    subtitle: nil,
+    title: nil,
+    type: nil
+  }
 
   defp create_task(_) do
     task = task_fixture()

@@ -7,7 +7,15 @@ defmodule Docket.TasksTest do
   describe "tasks" do
     import Docket.TasksFixtures
 
-    @invalid_attrs %{display_colour: nil, display_icon: nil, frequency: nil, frequency_type: nil, subtitle: nil, title: nil, type: nil}
+    @invalid_attrs %{
+      display_colour: nil,
+      display_icon: nil,
+      frequency: nil,
+      frequency_type: nil,
+      subtitle: nil,
+      title: nil,
+      type: nil
+    }
 
     test "list_tasks/0 returns all tasks" do
       task = task_fixture()
@@ -20,7 +28,15 @@ defmodule Docket.TasksTest do
     end
 
     test "create_task/1 with valid data creates a task" do
-      valid_attrs = %{display_colour: "some display_colour", display_icon: :bolt, frequency: 42, frequency_type: :hours, subtitle: "some subtitle", title: "some title", type: "some type"}
+      valid_attrs = %{
+        display_colour: "some display_colour",
+        display_icon: :bolt,
+        frequency: 42,
+        frequency_type: :hours,
+        subtitle: "some subtitle",
+        title: "some title",
+        type: "some type"
+      }
 
       assert {:ok, %Schema.Task{} = task} = Tasks.create_task(valid_attrs)
       assert task.display_colour == "some display_colour"
@@ -38,7 +54,16 @@ defmodule Docket.TasksTest do
 
     test "update_task/2 with valid data updates the task" do
       task = task_fixture()
-      update_attrs = %{display_colour: "some updated display_colour", display_icon: :"cog-6-tooth", frequency: 43, frequency_type: :days, subtitle: "some updated subtitle", title: "some updated title", type: "some updated type"}
+
+      update_attrs = %{
+        display_colour: "some updated display_colour",
+        display_icon: :"cog-6-tooth",
+        frequency: 43,
+        frequency_type: :days,
+        subtitle: "some updated subtitle",
+        title: "some updated title",
+        type: "some updated type"
+      }
 
       assert {:ok, %Schema.Task{} = task} = Tasks.update_task(task, update_attrs)
       assert task.display_colour == "some updated display_colour"
