@@ -10,7 +10,7 @@ defmodule Docket.MixProject do
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
-       dialyzer: dialyzer() ,
+      dialyzer: dialyzer(),
       preferred_cli_env: preferred_cli_env()
     ]
   end
@@ -67,6 +67,7 @@ defmodule Docket.MixProject do
       check: :test
     ]
   end
+
   # Aliases are shortcuts or tasks specific to the current project.
   # For example, to install project dependencies and perform other setup tasks, run:
   #
@@ -79,7 +80,13 @@ defmodule Docket.MixProject do
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
-      check: ["compile --warnings-as-errors", "test", "credo", "dialyzer --format dailyxer"],
+      check: [
+        "compile --warnings-as-errors",
+        "test",
+        "credo",
+        "dialyzer --format dailyxer",
+        "format --check-formatted"
+      ],
       "assets.deploy": ["tailwind default --minify", "esbuild default --minify", "phx.digest"]
     ]
   end
