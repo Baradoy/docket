@@ -1,4 +1,7 @@
 defmodule DocketWeb.ErrorHTML do
+  @moduledoc """
+  Errors Handeling
+  """
   use DocketWeb, :html
 
   # If you want to customize your error pages,

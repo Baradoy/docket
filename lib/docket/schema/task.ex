@@ -1,4 +1,12 @@
 defmodule Docket.Schema.Task do
+  @moduledoc """
+  A Tasks is the top level repeatable element.
+
+  Example:
+    Water the flowers every week
+    Take the Dog for a walk daily
+  """
+
   use Ecto.Schema
   import Ecto.Changeset
 

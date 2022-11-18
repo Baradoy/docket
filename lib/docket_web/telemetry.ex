@@ -1,4 +1,8 @@
 defmodule DocketWeb.Telemetry do
+  @moduledoc """
+  Default Telemetry
+  """
+
   use Supervisor
   import Telemetry.Metrics
 
