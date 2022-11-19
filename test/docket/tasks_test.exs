@@ -1,12 +1,12 @@
 defmodule Docket.TasksTest do
   use Docket.DataCase
 
+  import Docket.Factory
+
   alias Docket.Tasks
   alias Docket.Schema
 
   describe "tasks" do
-    import Docket.TasksFixtures
-
     @invalid_attrs %{
       display_colour: nil,
       display_icon: nil,
@@ -18,12 +18,12 @@ defmodule Docket.TasksTest do
     }
 
     test "list_tasks/0 returns all tasks" do
-      task = task_fixture()
+      task = insert(:task)
       assert Tasks.list_tasks() |> Enum.map(& &1.id) == [task.id]
     end
 
     test "get_task!/1 returns the task with given id" do
-      task = task_fixture()
+      task = insert(:task)
       assert Tasks.get_task!(task.id).id == task.id
     end
 
@@ -54,7 +54,7 @@ defmodule Docket.TasksTest do
     end
 
     test "update_task/2 with valid data updates the task" do
-      task = task_fixture()
+      task = insert(:task)
 
       update_attrs = %{
         display_colour: "some updated display_colour",
@@ -77,35 +77,33 @@ defmodule Docket.TasksTest do
     end
 
     test "update_task/2 with invalid data returns error changeset" do
-      task = task_fixture()
+      task = insert(:task)
       assert {:error, %Ecto.Changeset{}} = Tasks.update_task(task, @invalid_attrs)
       assert task.display_colour == Tasks.get_task!(task.id).display_colour
     end
 
     test "delete_task/1 deletes the task" do
-      task = task_fixture()
+      task = insert(:task)
       assert {:ok, %Schema.Task{}} = Tasks.delete_task(task)
       assert_raise Ecto.NoResultsError, fn -> Tasks.get_task!(task.id) end
     end
 
     test "change_task/1 returns a task changeset" do
-      task = task_fixture()
+      task = insert(:task)
       assert %Ecto.Changeset{} = Tasks.change_task(task)
     end
   end
 
   describe "task_appointments" do
-    import Docket.TasksFixtures
-
     @invalid_attrs %{completed_at: nil, scheduled_for: nil, status: nil}
 
     test "list_task_appointments/0 returns all task_appointments" do
-      task_appointment = task_appointment_fixture()
+      task_appointment = insert(:task_appointment)
       assert Tasks.list_task_appointments() == [task_appointment]
     end
 
     test "get_task_appointment!/1 returns the task_appointment with given id" do
-      task_appointment = task_appointment_fixture()
+      task_appointment = insert(:task_appointment)
       assert Tasks.get_task_appointment!(task_appointment.id) == task_appointment
     end
 
@@ -129,7 +127,7 @@ defmodule Docket.TasksTest do
     end
 
     test "update_task_appointment/2 with valid data updates the task_appointment" do
-      task_appointment = task_appointment_fixture()
+      task_appointment = insert(:task_appointment)
 
       update_attrs = %{
         completed_at: ~U[2022-11-18 22:32:00Z],
@@ -146,7 +144,7 @@ defmodule Docket.TasksTest do
     end
 
     test "update_task_appointment/2 with invalid data returns error changeset" do
-      task_appointment = task_appointment_fixture()
+      task_appointment = insert(:task_appointment)
 
       assert {:error, %Ecto.Changeset{}} =
                Tasks.update_task_appointment(task_appointment, @invalid_attrs)
@@ -155,13 +153,13 @@ defmodule Docket.TasksTest do
     end
 
     test "delete_task_appointment/1 deletes the task_appointment" do
-      task_appointment = task_appointment_fixture()
+      task_appointment = insert(:task_appointment)
       assert {:ok, %Schema.TaskAppointment{}} = Tasks.delete_task_appointment(task_appointment)
       assert_raise Ecto.NoResultsError, fn -> Tasks.get_task_appointment!(task_appointment.id) end
     end
 
     test "change_task_appointment/1 returns a task_appointment changeset" do
-      task_appointment = task_appointment_fixture()
+      task_appointment = insert(:task_appointment)
       assert %Ecto.Changeset{} = Tasks.change_task_appointment(task_appointment)
     end
   end

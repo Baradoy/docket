@@ -2,7 +2,8 @@ defmodule DocketWeb.TaskLiveTest do
   use DocketWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  import Docket.TasksFixtures
+
+  import Docket.Factory
 
   @create_attrs %{
     display_colour: "some display_colour",
@@ -33,7 +34,7 @@ defmodule DocketWeb.TaskLiveTest do
   }
 
   defp create_task(_) do
-    task = task_fixture()
+    task = insert(:task)
     %{task: task}
   end
 

@@ -80,7 +80,7 @@ defmodule Docket.Tasks do
   """
   def update_task(%Schema.Task{} = task, attrs) do
     task
-    |> Schema.Task.changeset(attrs)
+    |> change_task(attrs)
     |> Repo.update()
   end
 
