@@ -23,4 +23,20 @@ defmodule Docket.TasksFixtures do
 
     task
   end
+
+  @doc """
+  Generate a task_appointment.
+  """
+  def task_appointment_fixture(attrs \\ %{}) do
+    {:ok, task_appointment} =
+      attrs
+      |> Enum.into(%{
+        completed_at: ~U[2022-11-17 22:32:00Z],
+        scheduled_for: ~U[2022-11-17 22:32:00Z],
+        status: :pending
+      })
+      |> Docket.Tasks.create_task_appointment()
+
+    task_appointment
+  end
 end
