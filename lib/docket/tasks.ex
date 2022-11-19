@@ -113,6 +113,50 @@ defmodule Docket.Tasks do
     Schema.Task.changeset(task, attrs)
   end
 
+  def complete_task(%Schema.Task{} = task) when is_list(task.appointments) do
+    now = Timex.now()
+    appointments = put_status_for_pending_appointment(task, :complete, now)
+    next_appointment = next_appoointment_attrs(task, now)
+
+    update_task(task, %{appointments: [next_appointment | appointments]})
+  end
+
+  def snooze_task(%Schema.Task{} = task) when is_list(task.appointments) do
+    now = Timex.now()
+    appointments = put_status_for_pending_appointment(task, :snoozed, now)
+    next_appointment = next_appoointment_attrs(task, now)
+
+    update_task(task, %{appointments: [next_appointment | appointments]})
+  end
+
+  defp put_status_for_pending_appointment(%Schema.Task{} = task, status, now)
+       when is_list(task.appointments) do
+    Enum.map(task.appointments, fn
+      %_{status: :pending, id: id} -> %{completed_at: now, id: id, status: status}
+      %_{status: _, id: id} -> %{id: id}
+    end)
+  end
+
+  def next_appoointment_attrs(%Schema.Task{} = task, now) do
+    %{scheduled_for: next_appointment_date(task.frequency_type, task.frequency, now)}
+  end
+
+  def next_appointment_date(:hours, frequency, now),
+    do: Timex.shift(now, hours: frequency)
+
+  def next_appointment_date(:days, frequency, now),
+    do: Timex.shift(now, days: frequency)
+
+  def next_appointment_date(:months, frequency, now),
+    do: Timex.shift(now, months: frequency)
+
+  def next_appointment_date(:day_of_month, frequency, now),
+    do:
+      now
+      |> Timex.shift(months: 1)
+      |> Timex.beginning_of_month()
+      |> Timex.shift(days: frequency)
+
   @doc """
   Returns the list of task_appointments.
 

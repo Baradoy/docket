@@ -92,6 +92,22 @@ defmodule Docket.TasksTest do
       task = insert(:task)
       assert %Ecto.Changeset{} = Tasks.change_task(task)
     end
+
+    test "complete_task/1 completes a task" do
+      task = insert(:task)
+
+      assert {:ok, task} = Tasks.complete_task(task)
+
+      assert [%_{status: :pending}, %_{status: :complete}] = task.appointments
+    end
+
+    test "snooze_task/1 snoozes a task" do
+      task = insert(:task)
+
+      assert {:ok, task} = Tasks.snooze_task(task)
+
+      assert [%_{status: :pending}, %_{status: :snoozed}] = task.appointments
+    end
   end
 
   describe "task_appointments" do

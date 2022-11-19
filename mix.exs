@@ -53,7 +53,8 @@ defmodule Docket.MixProject do
       {:credo, "~> 1.6.0", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.1.0", only: [:dev, :test], runtime: false},
       {:ex_machina, "~> 2.7.0", only: :test},
-      {:faker, "~> 0.17", only: :test}
+      {:faker, "~> 0.17", only: :test},
+      {:timex, "~> 3.7"}
     ]
   end
 

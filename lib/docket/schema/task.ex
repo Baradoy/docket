@@ -18,7 +18,7 @@ defmodule Docket.Schema.Task do
     field :display_colour, :string
     field :display_icon, Ecto.Enum, values: [:bolt, :"cog-6-tooth", :cube, :"currency-dollar"]
     field :frequency, :integer
-    field :frequency_type, Ecto.Enum, values: [:hours, :days, :months, :day_of_month]
+    field :frequency_type, Ecto.Enum, values: [:hours, :days, :weeks, :months, :day_of_month]
     field :subtitle, :string
     field :title, :string
     field :type, :string
