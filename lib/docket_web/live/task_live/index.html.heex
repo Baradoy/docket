@@ -12,7 +12,8 @@
     <.hero icon={task.display_icon} />
   </:col>
   <:col :let={task} label="Title">
-    <%= task.title %> <.relative_humanized_date date={current_appointment_date(task)} />
+    <%= task.title %>
+    <.relative_humanized_date datetime={current_appointment_date(task)} now={@now} />
   </:col>
   <:col :let={task} label="Subtitle"><%= task.subtitle %></:col>
   <:col :let={task} label="Type"><%= task.type %></:col>

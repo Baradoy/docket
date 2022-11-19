@@ -11,6 +11,10 @@ config :docket,
   ecto_repos: [Docket.Repo],
   generators: [binary_id: true]
 
+# Config
+config :docket,
+  timezone: "America/Vancouver"
+
 # Configures the endpoint
 config :docket, DocketWeb.Endpoint,
   url: [host: "localhost"],

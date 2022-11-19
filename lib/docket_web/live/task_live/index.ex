@@ -3,10 +3,16 @@ defmodule DocketWeb.TaskLive.Index do
 
   alias Docket.Tasks
   alias Docket.Schema
+  alias Docket.Time
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, :tasks, list_tasks())}
+    socket =
+      socket
+      |> assign(:now, Time.now())
+      |> assign(:tasks, list_tasks())
+
+    {:ok, socket}
   end
 
   @impl true

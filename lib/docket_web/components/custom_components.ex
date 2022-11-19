@@ -5,6 +5,8 @@ defmodule DocketWeb.CustomComponents do
 
   use Phoenix.Component
 
+  alias Docket.Time
+
   attr :icon, :string, required: true
 
   attr :rest, :global,
@@ -22,12 +24,13 @@ defmodule DocketWeb.CustomComponents do
     """
   end
 
-  attr :date, DateTime
+  attr :datetime, DateTime, required: true
+  attr :now, DateTime, required: true
 
   def relative_humanized_date(assigns) do
     ~H"""
     <span>
-      <%= Timex.Format.DateTime.Formatters.Relative.format!(@date, "{relative}") %>
+      <%= Time.relative_format(@datetime, @now) %>
     </span>
     """
   end

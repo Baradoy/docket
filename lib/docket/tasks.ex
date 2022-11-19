@@ -7,6 +7,7 @@ defmodule Docket.Tasks do
   alias Docket.Repo
 
   alias Docket.Schema
+  alias Docket.Time
 
   @snooze_scale 0.10
 
@@ -59,7 +60,7 @@ defmodule Docket.Tasks do
     first_appointment =
       change_task_appointment(
         %Schema.TaskAppointment{},
-        %{scheduled_for: DateTime.now!("Etc/UTC")}
+        %{scheduled_for: Time.now()}
       )
 
     %Schema.Task{}
@@ -116,21 +117,21 @@ defmodule Docket.Tasks do
   end
 
   def complete_task(%Schema.Task{} = task) when is_list(task.appointments) do
-    now = Timex.now()
+    now = Time.now()
     appointments = put_status_for_pending_appointment(task, :complete, now)
-    next_duration = duration_from_date(task.frequency_type, task.frequency, now)
-    scheduled_for = Timex.add(now, next_duration)
+    next_duration = Time.duration_from_date(task.frequency_type, task.frequency, now)
+    scheduled_for = Time.add(now, next_duration)
 
     update_task(task, %{appointments: [%{scheduled_for: scheduled_for} | appointments]})
   end
 
   def snooze_task(%Schema.Task{} = task) when is_list(task.appointments) do
-    now = Timex.now()
+    now = Time.now()
     appointments = put_status_for_pending_appointment(task, :snoozed, now)
 
-    next_duration = duration_from_date(task.frequency_type, task.frequency, now)
-    snooze_duration = Timex.Duration.scale(next_duration, @snooze_scale)
-    scheduled_for = Timex.add(now, snooze_duration)
+    next_duration = Time.duration_from_date(task.frequency_type, task.frequency, now)
+    snooze_duration = Time.scale(next_duration, @snooze_scale)
+    scheduled_for = Time.add(now, snooze_duration)
 
     update_task(task, %{appointments: [%{scheduled_for: scheduled_for} | appointments]})
   end
@@ -141,27 +142,6 @@ defmodule Docket.Tasks do
       %_{status: :pending, id: id} -> %{completed_at: now, id: id, status: status}
       %_{status: _, id: id} -> %{id: id}
     end)
-  end
-
-  def duration_from_date(:hours, frequency, _date),
-    do: Timex.Duration.from_hours(frequency)
-
-  def duration_from_date(:days, frequency, _date),
-    do: Timex.Duration.from_days(frequency)
-
-  def duration_from_date(:weeks, frequency, _date),
-    do: Timex.Duration.from_weeks(frequency)
-
-  def duration_from_date(:months, frequency, date) do
-    date |> Timex.shift(months: frequency) |> Timex.diff(date, :duration)
-  end
-
-  def duration_from_date(:day_of_month, frequency, date) do
-    date
-    |> Timex.shift(months: 1)
-    |> Timex.beginning_of_month()
-    |> Timex.shift(days: frequency)
-    |> Timex.diff(date, :duration)
   end
 
   @doc """
