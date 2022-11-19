@@ -8,6 +8,8 @@ defmodule Docket.Tasks do
 
   alias Docket.Schema
 
+  @snooze_scale 0.10
+
   @doc """
   Returns the list of tasks.
 
@@ -116,17 +118,21 @@ defmodule Docket.Tasks do
   def complete_task(%Schema.Task{} = task) when is_list(task.appointments) do
     now = Timex.now()
     appointments = put_status_for_pending_appointment(task, :complete, now)
-    next_appointment = next_appoointment_attrs(task, now)
+    next_duration = duration_from_date(task.frequency_type, task.frequency, now)
+    scheduled_for = Timex.add(now, next_duration)
 
-    update_task(task, %{appointments: [next_appointment | appointments]})
+    update_task(task, %{appointments: [%{scheduled_for: scheduled_for} | appointments]})
   end
 
   def snooze_task(%Schema.Task{} = task) when is_list(task.appointments) do
     now = Timex.now()
     appointments = put_status_for_pending_appointment(task, :snoozed, now)
-    next_appointment = next_appoointment_attrs(task, now)
 
-    update_task(task, %{appointments: [next_appointment | appointments]})
+    next_duration = duration_from_date(task.frequency_type, task.frequency, now)
+    snooze_duration = Timex.Duration.scale(next_duration, @snooze_scale)
+    scheduled_for = Timex.add(now, snooze_duration)
+
+    update_task(task, %{appointments: [%{scheduled_for: scheduled_for} | appointments]})
   end
 
   defp put_status_for_pending_appointment(%Schema.Task{} = task, status, now)
@@ -137,28 +143,26 @@ defmodule Docket.Tasks do
     end)
   end
 
-  def next_appoointment_attrs(%Schema.Task{} = task, now) do
-    %{scheduled_for: next_appointment_date(task.frequency_type, task.frequency, now)}
+  def duration_from_date(:hours, frequency, _date),
+    do: Timex.Duration.from_hours(frequency)
+
+  def duration_from_date(:days, frequency, _date),
+    do: Timex.Duration.from_days(frequency)
+
+  def duration_from_date(:weeks, frequency, _date),
+    do: Timex.Duration.from_weeks(frequency)
+
+  def duration_from_date(:months, frequency, date) do
+    date |> Timex.shift(months: frequency) |> Timex.diff(date, :duration)
   end
 
-  def next_appointment_date(:hours, frequency, now),
-    do: Timex.shift(now, hours: frequency)
-
-  def next_appointment_date(:days, frequency, now),
-    do: Timex.shift(now, days: frequency)
-
-  def next_appointment_date(:weeks, frequency, now),
-    do: Timex.shift(now, weeks: frequency)
-
-  def next_appointment_date(:months, frequency, now),
-    do: Timex.shift(now, months: frequency)
-
-  def next_appointment_date(:day_of_month, frequency, now),
-    do:
-      now
-      |> Timex.shift(months: 1)
-      |> Timex.beginning_of_month()
-      |> Timex.shift(days: frequency)
+  def duration_from_date(:day_of_month, frequency, date) do
+    date
+    |> Timex.shift(months: 1)
+    |> Timex.beginning_of_month()
+    |> Timex.shift(days: frequency)
+    |> Timex.diff(date, :duration)
+  end
 
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking task_appointment changes.
