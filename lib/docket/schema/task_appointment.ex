@@ -13,7 +13,7 @@ defmodule Docket.Schema.TaskAppointment do
   schema "task_appointments" do
     field :completed_at, :utc_datetime
     field :scheduled_for, :utc_datetime
-    field :status, Ecto.Enum, values: [:pending, :complete, :snoozed]
+    field :status, Ecto.Enum, values: [:pending, :complete, :snoozed], default: :pending
     belongs_to :task, Schema.Task
 
     timestamps()

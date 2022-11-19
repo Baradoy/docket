@@ -10,6 +10,8 @@ defmodule Docket.Schema.Task do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias Docket.Schema
+
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "tasks" do
@@ -20,6 +22,8 @@ defmodule Docket.Schema.Task do
     field :subtitle, :string
     field :title, :string
     field :type, :string
+
+    has_many :appointments, Schema.TaskAppointment
 
     timestamps()
   end
@@ -45,5 +49,6 @@ defmodule Docket.Schema.Task do
       :frequency,
       :frequency_type
     ])
+    |> cast_assoc(:appointments)
   end
 end

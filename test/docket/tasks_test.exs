@@ -19,12 +19,12 @@ defmodule Docket.TasksTest do
 
     test "list_tasks/0 returns all tasks" do
       task = task_fixture()
-      assert Tasks.list_tasks() == [task]
+      assert Tasks.list_tasks() |> Enum.map(& &1.id) == [task.id]
     end
 
     test "get_task!/1 returns the task with given id" do
       task = task_fixture()
-      assert Tasks.get_task!(task.id) == task
+      assert Tasks.get_task!(task.id).id == task.id
     end
 
     test "create_task/1 with valid data creates a task" do
@@ -46,6 +46,7 @@ defmodule Docket.TasksTest do
       assert task.subtitle == "some subtitle"
       assert task.title == "some title"
       assert task.type == "some type"
+      assert [%Schema.TaskAppointment{status: :pending}] = task.appointments
     end
 
     test "create_task/1 with invalid data returns error changeset" do
@@ -78,7 +79,7 @@ defmodule Docket.TasksTest do
     test "update_task/2 with invalid data returns error changeset" do
       task = task_fixture()
       assert {:error, %Ecto.Changeset{}} = Tasks.update_task(task, @invalid_attrs)
-      assert task == Tasks.get_task!(task.id)
+      assert task.display_colour == Tasks.get_task!(task.id).display_colour
     end
 
     test "delete_task/1 deletes the task" do

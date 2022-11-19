@@ -18,7 +18,7 @@ defmodule Docket.Tasks do
 
   """
   def list_tasks do
-    Repo.all(Schema.Task)
+    Repo.all(task_queryable())
   end
 
   @doc """
@@ -35,7 +35,11 @@ defmodule Docket.Tasks do
       ** (Ecto.NoResultsError)
 
   """
-  def get_task!(id), do: Repo.get!(Schema.Task, id)
+  def get_task!(id), do: Repo.get!(task_queryable(), id)
+
+  def task_queryable do
+    preload(Schema.Task, [:appointments])
+  end
 
   @doc """
   Creates a task.
@@ -50,8 +54,15 @@ defmodule Docket.Tasks do
 
   """
   def create_task(attrs \\ %{}) do
+    first_appointment =
+      change_task_appointment(
+        %Schema.TaskAppointment{},
+        %{scheduled_for: DateTime.now!("Etc/UTC")}
+      )
+
     %Schema.Task{}
-    |> Schema.Task.changeset(attrs)
+    |> change_task(attrs)
+    |> Ecto.Changeset.put_assoc(:appointments, [first_appointment])
     |> Repo.insert()
   end
 
