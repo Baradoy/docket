@@ -8,13 +8,27 @@
 </.header>
 
 <.table id="tasks" rows={@tasks} row_click={&JS.navigate(~p"/tasks/#{&1}")}>
-  <:col :let={task} label="Title"><%= task.title %></:col>
+  <:col :let={task} label="Icon">
+    <.hero icon={task.display_icon} />
+  </:col>
+  <:col :let={task} label="Title">
+    <%= task.title %> <.relative_humanized_date date={current_appointment_date(task)} />
+  </:col>
   <:col :let={task} label="Subtitle"><%= task.subtitle %></:col>
   <:col :let={task} label="Type"><%= task.type %></:col>
-  <:col :let={task} label="Display colour"><%= task.display_colour %></:col>
-  <:col :let={task} label="Display icon"><%= task.display_icon %></:col>
-  <:col :let={task} label="Frequency"><%= task.frequency %></:col>
-  <:col :let={task} label="Frequency type"><%= task.frequency_type %></:col>
+  <:col :let={task} label="Frequency">
+    Every <%= task.frequency %> <%= task.frequency_type %>
+  </:col>
+  <:action :let={task}>
+    <.link phx-click={JS.push("complete", value: %{id: task.id})} data-confirm="Are you sure?">
+      Complete
+    </.link>
+  </:action>
+  <:action :let={task}>
+    <.link phx-click={JS.push("snooze", value: %{id: task.id})} data-confirm="Are you sure?">
+      Snooze
+    </.link>
+  </:action>
   <:action :let={task}>
     <div class="sr-only">
       <.link navigate={~p"/tasks/#{task}"}>Show</.link>

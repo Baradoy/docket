@@ -58,7 +58,7 @@ defmodule Docket.TasksTest do
 
       update_attrs = %{
         display_colour: "some updated display_colour",
-        display_icon: :"cog-6-tooth",
+        display_icon: :cog_6_tooth,
         frequency: 43,
         frequency_type: :days,
         subtitle: "some updated subtitle",
@@ -68,7 +68,7 @@ defmodule Docket.TasksTest do
 
       assert {:ok, %Schema.Task{} = task} = Tasks.update_task(task, update_attrs)
       assert task.display_colour == "some updated display_colour"
-      assert task.display_icon == :"cog-6-tooth"
+      assert task.display_icon == :cog_6_tooth
       assert task.frequency == 43
       assert task.frequency_type == :days
       assert task.subtitle == "some updated subtitle"
@@ -107,76 +107,6 @@ defmodule Docket.TasksTest do
       assert {:ok, task} = Tasks.snooze_task(task)
 
       assert [%_{status: :pending}, %_{status: :snoozed}] = task.appointments
-    end
-  end
-
-  describe "task_appointments" do
-    @invalid_attrs %{completed_at: nil, scheduled_for: nil, status: nil}
-
-    test "list_task_appointments/0 returns all task_appointments" do
-      task_appointment = insert(:task_appointment)
-      assert Tasks.list_task_appointments() == [task_appointment]
-    end
-
-    test "get_task_appointment!/1 returns the task_appointment with given id" do
-      task_appointment = insert(:task_appointment)
-      assert Tasks.get_task_appointment!(task_appointment.id) == task_appointment
-    end
-
-    test "create_task_appointment/1 with valid data creates a task_appointment" do
-      valid_attrs = %{
-        completed_at: ~U[2022-11-17 22:32:00Z],
-        scheduled_for: ~U[2022-11-17 22:32:00Z],
-        status: :pending
-      }
-
-      assert {:ok, %Schema.TaskAppointment{} = task_appointment} =
-               Tasks.create_task_appointment(valid_attrs)
-
-      assert task_appointment.completed_at == ~U[2022-11-17 22:32:00Z]
-      assert task_appointment.scheduled_for == ~U[2022-11-17 22:32:00Z]
-      assert task_appointment.status == :pending
-    end
-
-    test "create_task_appointment/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Tasks.create_task_appointment(@invalid_attrs)
-    end
-
-    test "update_task_appointment/2 with valid data updates the task_appointment" do
-      task_appointment = insert(:task_appointment)
-
-      update_attrs = %{
-        completed_at: ~U[2022-11-18 22:32:00Z],
-        scheduled_for: ~U[2022-11-18 22:32:00Z],
-        status: :complete
-      }
-
-      assert {:ok, %Schema.TaskAppointment{} = task_appointment} =
-               Tasks.update_task_appointment(task_appointment, update_attrs)
-
-      assert task_appointment.completed_at == ~U[2022-11-18 22:32:00Z]
-      assert task_appointment.scheduled_for == ~U[2022-11-18 22:32:00Z]
-      assert task_appointment.status == :complete
-    end
-
-    test "update_task_appointment/2 with invalid data returns error changeset" do
-      task_appointment = insert(:task_appointment)
-
-      assert {:error, %Ecto.Changeset{}} =
-               Tasks.update_task_appointment(task_appointment, @invalid_attrs)
-
-      assert task_appointment == Tasks.get_task_appointment!(task_appointment.id)
-    end
-
-    test "delete_task_appointment/1 deletes the task_appointment" do
-      task_appointment = insert(:task_appointment)
-      assert {:ok, %Schema.TaskAppointment{}} = Tasks.delete_task_appointment(task_appointment)
-      assert_raise Ecto.NoResultsError, fn -> Tasks.get_task_appointment!(task_appointment.id) end
-    end
-
-    test "change_task_appointment/1 returns a task_appointment changeset" do
-      task_appointment = insert(:task_appointment)
-      assert %Ecto.Changeset{} = Tasks.change_task_appointment(task_appointment)
     end
   end
 end

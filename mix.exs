@@ -85,10 +85,10 @@ defmodule Docket.MixProject do
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       check: [
         "compile --warnings-as-errors",
-        "test",
         "credo",
         "dialyzer --format dailyxer",
-        "format --check-formatted"
+        "format --check-formatted",
+        "test"
       ],
       "assets.deploy": ["tailwind default --minify", "esbuild default --minify", "phx.digest"]
     ]

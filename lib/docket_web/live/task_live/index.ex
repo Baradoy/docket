@@ -33,6 +33,20 @@ defmodule DocketWeb.TaskLive.Index do
   end
 
   @impl true
+  def handle_event("complete", %{"id" => id}, socket) do
+    task = Tasks.get_task!(id)
+    {:ok, _} = Tasks.complete_task(task)
+
+    {:noreply, assign(socket, :tasks, list_tasks())}
+  end
+
+  def handle_event("snooze", %{"id" => id}, socket) do
+    task = Tasks.get_task!(id)
+    {:ok, _} = Tasks.snooze_task(task)
+
+    {:noreply, assign(socket, :tasks, list_tasks())}
+  end
+
   def handle_event("delete", %{"id" => id}, socket) do
     task = Tasks.get_task!(id)
     {:ok, _} = Tasks.delete_task(task)
@@ -43,4 +57,6 @@ defmodule DocketWeb.TaskLive.Index do
   defp list_tasks do
     Tasks.list_tasks()
   end
+
+  defp current_appointment_date(task), do: Tasks.current_appointment(task).scheduled_for
 end

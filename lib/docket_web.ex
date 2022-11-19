@@ -85,6 +85,7 @@ defmodule DocketWeb do
       import Phoenix.HTML
       # Core UI components and translation
       import DocketWeb.CoreComponents
+      import DocketWeb.CustomComponents
 
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS

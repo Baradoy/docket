@@ -16,7 +16,7 @@ defmodule DocketWeb.TaskLiveTest do
   }
   @update_attrs %{
     display_colour: "some updated display_colour",
-    display_icon: :"cog-6-tooth",
+    display_icon: :cog_6_tooth,
     frequency: 43,
     frequency_type: :days,
     subtitle: "some updated subtitle",
@@ -45,7 +45,7 @@ defmodule DocketWeb.TaskLiveTest do
       {:ok, _index_live, html} = live(conn, ~p"/tasks")
 
       assert html =~ "Listing Tasks"
-      assert html =~ task.display_colour
+      assert html =~ task.title
     end
 
     test "saves new task", %{conn: conn} do
@@ -67,7 +67,7 @@ defmodule DocketWeb.TaskLiveTest do
         |> follow_redirect(conn, ~p"/tasks")
 
       assert html =~ "Task created successfully"
-      assert html =~ "some display_colour"
+      assert html =~ "some title"
     end
 
     test "updates task in listing", %{conn: conn, task: task} do
@@ -89,7 +89,7 @@ defmodule DocketWeb.TaskLiveTest do
         |> follow_redirect(conn, ~p"/tasks")
 
       assert html =~ "Task updated successfully"
-      assert html =~ "some updated display_colour"
+      assert html =~ "some updated title"
     end
 
     test "deletes task in listing", %{conn: conn, task: task} do
